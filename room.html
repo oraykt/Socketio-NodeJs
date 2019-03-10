@@ -1,0 +1,67 @@
+<html>
+
+<head>
+    <title>Web Socket</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        #leaveRoom {
+            display: none;
+        }
+
+    </style>
+    <script>
+        $(() => {
+            const socket = io.connect('http://localhost:3000');
+            $('#joinRoom').on('click', () => {
+                socket.emit('joinRoom', {
+                    roomName: $('#roomName').val(),
+                    userName: $('#userName').val(),
+                });
+                socket.on('joined', (data) => {
+                    $('.userCount').html("Bu odada " + data.count + " kisi var");
+                });
+                socket.on('leaved', (data) => {
+                    $('.userCount').html("Bu odada " + data.count + " kisi var");
+                });
+                socket.on('log', (data) => {
+                    if (data.login) {
+                        $('.logs').html(data.userName + " " + data.message);
+                        $('#roomName, #userName , #joinRoom').attr('disabled', 'disabled',
+                            'disabled');
+                        $('#leaveRoom').show();
+                    } else {
+                        $('.logs').html(data.userName + " " + data.message);
+                        $('#roomName, #userName , #joinRoom').removeAttr('disabled', 'disabled',
+                            'disabled');
+                        $('#leaveRoom').hide();
+                        $('.userCount').empty();
+                    }
+                });
+            });
+            $('#leaveRoom').on('click', () => {
+                socket.emit('leaveRoom', {
+                    roomName: $('#roomName').val(),
+                    userName: $('#userName').val(),
+                });
+            });
+        });
+
+    </script>
+</head>
+
+<body>
+
+
+    <label>Oda Ismi</label><input id="roomName" /> <br />
+    <label>Isminiz</label><input id="userName" /> <br />
+    <button id="joinRoom">Join</button> <button id="leaveRoom">Leave</button> <br />
+    <br /><br />
+    <div class="logs"></div>
+    <div class='userCount'></div>
+    <ul id="users"></ul>
+
+
+</body>
+
+</html>

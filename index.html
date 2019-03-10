@@ -1,0 +1,62 @@
+<html>
+
+<head>
+    <title>Web Socket</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(() => {
+            //const mainSocket = io.connect("http://localhost:3000/");
+            const myNameSpaceSocket = io.connect("http://localhost:3000/mynamespace");
+
+            $('#mynamespace').on('click',()=>{
+                myNameSpaceSocket.emit('saysHiFromNSP', "hi");
+            });
+
+            myNameSpaceSocket.on('recievedMessage',(data)=>{
+                $('body').append(`${data} <br>`)
+            });
+
+    
+            // $('button').on('click', () => {
+            //     socket.emit('saysHi', {
+            //         user: 'oraykt',
+            //         message: 'Hi !'
+            //     });
+            // });
+
+            // socket.on('server says hi', (data) => {
+            //     $('#server').append(data.user + " : " + data.message + "<br />");
+            // });
+
+            
+            // $('button').on('click',()=>{
+            //     myNameSpaceSocket.emit('newConnection', {name: $('#name').val()});
+            //     //mainSocket.emit('new-user', {name: $('#name').val()});
+            //     $('.users').append('<li> You connected! </li>');
+            // });
+            // mainSocket.on('userConnect', (data)=>{
+            //     $('.users').append('<li><b>' + data.name + '</b> connected!</li>')
+            // });
+        });
+
+    </script>
+</head>
+
+<body>
+    <!--
+    Index.html <br />
+    <button>Says Hi!</button>
+    <div id="server"></div>
+    -->
+
+    <input type="text" id="name" />
+    <button>Connect</button>
+    <br />
+    <ul class="users">
+    </ul>
+    <br />
+    <button id="mynamespace"> mynamespace </button>
+</body>
+
+</html>
