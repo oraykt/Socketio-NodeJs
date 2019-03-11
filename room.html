@@ -12,7 +12,11 @@
     </style>
     <script>
         $(() => {
-            const socket = io.connect('http://localhost:3000');
+            const socket = io.connect('http://localhost:3000', {
+                reconnectionAttempts: 4,
+                reconnectionDelay: 500
+                // reconnection: false
+            });
             $('#joinRoom').on('click', () => {
                 socket.emit('joinRoom', {
                     roomName: $('#roomName').val(),
