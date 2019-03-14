@@ -17,6 +17,14 @@
                 reconnectionDelay: 500
                 // reconnection: false
             });
+            socket.on('reconnect_attempt', () => {
+                $("#reconnect-status").html("Yeniden baglanmaya calisiliyor!");
+            });
+            socket.on('reconnect_error', () => {
+                setTimeout(() => {
+                    $("#reconnect-status").html("Yeniden baglanmaya basarisiz!");
+                }, 500);
+            })
             $('#joinRoom').on('click', () => {
                 socket.emit('joinRoom', {
                     roomName: $('#roomName').val(),
@@ -55,7 +63,7 @@
 </head>
 
 <body>
-
+    <div id="reconnect-status"></div>
 
     <label>Oda Ismi</label><input id="roomName" /> <br />
     <label>Isminiz</label><input id="userName" /> <br />
